@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Safe Map</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <style>
+        #map {
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+    // Initialize map (example: Mysuru, India)
+    var map = L.map('map').setView([12.2958, 76.6394], 13);
+
+    // Load map tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    // Example "crime risk" data (fake AI output)
+    var zones = [
+        {lat: 12.2958, lng: 76.6394, risk: "high"},
+        {lat: 12.3000, lng: 76.6500, risk: "low"},
+        {lat: 12.2900, lng: 76.6300, risk: "medium"}
+    ];
+
+    // Function to decide color
+    function getColor(risk) {
+        return risk === "high" ? "red" :
+               risk === "medium" ? "orange" :
+               "green";
+    }
+
+    // Add circles to map
+    zones.forEach(function(zone) {
+        L.circle([zone.lat, zone.lng], {
+            color: getColor(zone.risk),
+            fillColor: getColor(zone.risk),
+            fillOpacity: 0.5,
+            radius: 300
+        }).addTo(map)
+          .bindPopup("Risk Level: " + zone.risk);
+    });
+</script>
+
+</body>
+</html>
